@@ -26,10 +26,14 @@ import com.example.android.dagger.R
 import com.example.android.dagger.login.LoginActivity
 import com.example.android.dagger.registration.RegistrationActivity
 import com.example.android.dagger.settings.SettingsActivity
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var userManager: com.example.android.dagger.user.UserManager
 
     /**
      * If the User is not registered, RegistrationActivity will be launched,
@@ -37,9 +41,10 @@ class MainActivity : AppCompatActivity() {
      * else carry on with MainActivity
      */
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as MyApplication).appComponent.inject(this)
         super.onCreate(savedInstanceState)
 
-        val userManager = (application as MyApplication).userManager
+//        val userManager = (application as MyApplication).userManager
         if (!userManager.isUserLoggedIn()) {
             if (!userManager.isUserRegistered()) {
                 startActivity(Intent(this, RegistrationActivity::class.java))
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             setContentView(R.layout.activity_main)
 
-            mainViewModel = MainViewModel(userManager.userDataRepository!!)
+//            mainViewModel = MainViewModel(userManager.userDataRepository!!)
             setupViews()
         }
     }
